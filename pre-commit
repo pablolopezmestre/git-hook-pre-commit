@@ -3,7 +3,20 @@
 COLOR_RED=$(printf '\033[0;31m')
 COLOR_GREEN=$(printf '\033[0;92m')
 COLOR_DEFAULT=$(printf '\033[0m')
+CURRENT_BRANCH=$(git symbolic-ref HEAD)
 
+# Avoid commits in master/main branch
+if [[ "$CURRENT_BRANCH" == "refs/heads/master" || "$CURRENT_BRANCH" == "refs/heads/main" ]]; then
+    echo "*******************************************"
+    echo "***                                     ***"
+    echo "***   ${COLOR_RED}Direct commits to the master or${COLOR_DEFAULT}   ***"
+    echo "***   ${COLOR_RED}main branch are not allowed.${COLOR_DEFAULT}      ***"
+    echo "***                                     ***"
+    echo "*******************************************"
+    exit 77 # permission denied
+fi
+
+# Check for merge conflicts
 conflicts=`git diff --cached --name-only -G"<<<<<|=====|>>>>>"`
 
 if [[ -n "$conflicts" ]]; then
