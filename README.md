@@ -1,0 +1,1 @@
+# git-hook-avoid-commit-merge-conflicts
